@@ -1,0 +1,18 @@
+---
+
+- name: Create basepath separately - probably not necessary
+  file: path={{ vm.basepath }} owner={{ local_user }} group={{ local_group }} state=directory
+  sudo: yes
+  tags: common
+
+- name: Create vsrx directories (or ovftool acts weird)
+  file: path={{ vm.basepath }}/{{ item }} owner={{ local_user }} group={{ local_group }} state=directory
+  with_items:
+  - ${router1.hostname}
+  - ${router2.hostname}
+  - ${router3.hostname}
+  - ${router4.hostname}
+  - ${router5.hostname}
+  - ${router6.hostname}
+  sudo: yes
+  tags: common

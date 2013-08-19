@@ -1,0 +1,7 @@
+---
+- name: Pause all SRX devices
+  hosts: localhost
+  user: $local_user
+
+  roles:
+    - vix-vmrun-pause

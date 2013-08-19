@@ -1,0 +1,14 @@
+---
+  ## Remove 'nogui' to launch with VMware client - you may have issues with "DISPLAY not set"
+  ## (even though it is!)
+
+- name: Start the VSRXes
+  command: ${vmw.vmrun} start {{ vm.basepath }}/{{ item.hostname }}/{{ item.hostname }}.vmx nogui
+  with_items:
+  - hostname: ${router1.hostname}
+  - hostname: ${router2.hostname}
+  - hostname: ${router3.hostname}
+  - hostname: ${router4.hostname}
+  - hostname: ${router5.hostname}
+  - hostname: ${router6.hostname}
+  tags: start

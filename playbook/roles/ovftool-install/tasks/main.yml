@@ -1,0 +1,12 @@
+---
+
+- name: Install VSRXes from .OVA
+  command: creates={{ item.vmxpath }} {{ vmw.ovftool }} {{ vmw.flags }} {{ ova.path }} {{ vm.basepath }}/{{ item.hostname }}/{{ item.hostname }}.vmx
+  with_items:
+    - { vmxpath: '${vm.vmx1}', hostname: '${router1.hostname}' }
+    - { vmxpath: '${vm.vmx2}', hostname: '${router2.hostname}' }
+    - { vmxpath: '${vm.vmx3}', hostname: '${router3.hostname}' }
+    - { vmxpath: '${vm.vmx4}', hostname: '${router4.hostname}' }
+    - { vmxpath: '${vm.vmx5}', hostname: '${router5.hostname}' }
+    - { vmxpath: '${vm.vmx6}', hostname: '${router6.hostname}' }
+  tags: ovftool

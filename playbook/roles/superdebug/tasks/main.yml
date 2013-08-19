@@ -1,0 +1,28 @@
+---
+- name: Install git Debian-based distros
+  apt: pkg={{ item }} state=present
+  with_items:
+    - git
+  tags: dnsmasq 
+  sudo: yes
+  when: ansible_os_family == "Debian"
+
+- name: Install git for RPM-based distros
+  yum: pkg={{ item }} state=present
+  with_items:
+    - git
+  tags: git
+  sudo: yes
+  when: ansible_os_family == "RedHat"
+
+- name: Copy .gitignore to vsrx directories
+  copy: creates={{ vm.basepath }}/{{ item.hostname }}/.gitignore src=.gitignore.vmdir dest={{ vm.basepath }}/{{ item.hostname }}/.gitignore
+  with_items:
+  - hostname: ${router1.hostname}
+  - hostname: ${router2.hostname}
+  - hostname: ${router3.hostname}
+  - hostname: ${router4.hostname}
+  - hostname: ${router5.hostname}
+  - hostname: ${router6.hostname}
+  tags: git
+  sudo: yes

@@ -1,0 +1,214 @@
+---
+
+# regexp will be cleaned up with care to:
+# - remain idempotent
+# - still work (this was an issue w/o major testing)
+# - reduce size of playbook
+# - nested loops incoming, depending on how they work???
+# - move more things to vars
+#
+# issue: if 'virtual ethernet' fails during restart, run Virtual Network Editor once
+
+- name: VNET_10 settings
+  lineinfile: dest={{ vmw.networking }} regexp="answer {{ item.regex }}" line="answer {{ item.line }}"
+  with_items:
+  - { regex: 'VNET_10_DHCP', line: 'VNET_10_DHCP no'}
+  - { regex: 'VNET_10_HOSTONLY_NETMASK', line: 'VNET_10_HOSTONLY_NETMASK' }
+  - { regex: 'VNET_10_HOSTONLY_SUBNET', line: 'VNET_10_HOSTONLY_SUBNET' }
+  - { regex: 'VNET_10_VIRTUAL_ADAPTER', line: 'VNET_10_VIRTUAL_ADAPTER' }
+  sudo: yes
+  tags: network
+
+- name: VNET_X_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="answer {{ item[0] }}"
+
+- name: VNET_11_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_11_HOSTONLY_NETMASK" line="answer VNET_11_HOSTONLY_NETMASK 255.255.255.0"
+  sudo: yes
+  tags: network
+- name: VNET_11_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_11_HOSTONLY_SUBNET" line="answer VNET_11_HOSTONLY_SUBNET 192.168.101.0"
+  sudo: yes
+  tags: network
+- name: VNET_12_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_12_HOSTONLY_NETMASK" line="answer VNET_12_HOSTONLY_NETMASK 255.255.255.0"
+  sudo: yes
+  tags: network
+- name: VNET_12_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_12_HOSTONLY_SUBNET" line="answer VNET_12_HOSTONLY_SUBNET 192.168.102.0"
+  sudo: yes
+  tags: network
+- name: VNET_13_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_13_HOSTONLY_NETMASK" line="answer VNET_13_HOSTONLY_NETMASK 255.255.255.0"
+  sudo: yes
+  tags: network
+- name: VNET_13_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_13_HOSTONLY_SUBNET" line="answer VNET_13_HOSTONLY_SUBNET 192.168.103.0"
+  sudo: yes
+  tags: network
+- name: VNET_14_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_14_HOSTONLY_NETMASK" line="answer VNET_14_HOSTONLY_NETMASK 255.255.255.0"
+  sudo: yes
+  tags: network
+- name: VNET_14_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_14_HOSTONLY_SUBNET" line="answer VNET_14_HOSTONLY_SUBNET 192.168.104.0"
+  sudo: yes
+  tags: network
+- name: VNET_15_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_15_HOSTONLY_NETMASK" line="answer VNET_15_HOSTONLY_NETMASK 255.255.255.0"
+  sudo: yes
+  tags: network
+- name: VNET_15_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_15_HOSTONLY_SUBNET" line="answer VNET_15_HOSTONLY_SUBNET 192.168.105.0"
+  sudo: yes
+  tags: network
+- name: VNET_16_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_16_HOSTONLY_NETMASK" line="answer VNET_16_HOSTONLY_NETMASK 255.255.255.0"
+  sudo: yes
+  tags: network
+- name: VNET_16_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_16_HOSTONLY_SUBNET" line="answer VNET_16_HOSTONLY_SUBNET 192.168.106.0"
+  sudo: yes
+  tags: network
+- name: VNET_17_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_17_HOSTONLY_NETMASK" line="answer VNET_17_HOSTONLY_NETMASK 255.255.255.0"
+  sudo: yes
+  tags: network
+- name: VNET_17_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_17_HOSTONLY_SUBNET" line="answer VNET_17_HOSTONLY_SUBNET 192.168.107.0"
+  sudo: yes
+  tags: network
+- name: VNET_18_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_18_HOSTONLY_NETMASK" line="answer VNET_18_HOSTONLY_NETMASK 255.255.255.0"
+  sudo: yes
+  tags: network
+- name: VNET_18_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_18_HOSTONLY_SUBNET" line="answer VNET_18_HOSTONLY_SUBNET 192.168.108.0"
+  sudo: yes
+  tags: network
+- name: VNET_19_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_19_HOSTONLY_NETMASK" line="answer VNET_19_HOSTONLY_NETMASK 255.255.255.0"
+  sudo: yes
+  tags: network
+- name: VNET_19_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_19_HOSTONLY_SUBNET" line="answer VNET_19_HOSTONLY_SUBNET 192.168.109.0"
+  sudo: yes
+  tags: network
+- name: VNET_20_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_20_HOSTONLY_NETMASK" line="answer VNET_20_HOSTONLY_NETMASK 255.255.255.0"
+  sudo: yes
+  tags: network
+- name: VNET_20_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_20_HOSTONLY_SUBNET" line="answer VNET_20_HOSTONLY_SUBNET 192.168.110.0"
+  sudo: yes
+  tags: network
+- name: VNET_21_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_21_HOSTONLY_NETMASK" line="answer VNET_21_HOSTONLY_NETMASK 255.255.255.0"
+  sudo: yes
+  tags: network
+- name: VNET_21_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_21_HOSTONLY_SUBNET" line="answer VNET_21_HOSTONLY_SUBNET 192.168.111.0"
+  sudo: yes
+  tags: network
+- name: VNET_22_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_22_HOSTONLY_NETMASK" line="answer VNET_22_HOSTONLY_NETMASK 255.255.255.0"
+  sudo: yes
+  tags: network
+- name: VNET_22_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_22_HOSTONLY_SUBNET" line="answer VNET_22_HOSTONLY_SUBNET 192.168.112.0"
+  sudo: yes
+  tags: network
+- name: VNET_23_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_23_HOSTONLY_NETMASK" line="answer VNET_23_HOSTONLY_NETMASK 255.255.255.0"
+  sudo: yes
+  tags: network
+- name: VNET_23_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_23_HOSTONLY_SUBNET" line="answer VNET_23_HOSTONLY_SUBNET 192.168.113.0"
+  sudo: yes
+  tags: network
+- name: VNET_24_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_24_HOSTONLY_NETMASK" line="answer VNET_24_HOSTONLY_NETMASK 255.255.255.0"
+  sudo: yes
+  tags: network
+- name: VNET_24_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_24_HOSTONLY_SUBNET" line="answer VNET_24_HOSTONLY_SUBNET 192.168.114.0"
+  sudo: yes
+  tags: network
+- name: VNET_25_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_25_HOSTONLY_NETMASK" line="answer VNET_25_HOSTONLY_NETMASK 255.255.255.0"
+  sudo: yes
+  tags: network
+- name: VNET_25_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="^answer VNET_25_HOSTONLY_SUBNET" line="answer VNET_25_HOSTONLY_SUBNET 192.168.115.0"
+  sudo: yes
+  tags: network
+- name: network11.device
+  lineinfile: dest={{ vmw.netmap }} regexp="^network11.device" line="network11.device = \"vmnet11\""
+  sudo: yes
+  tags: network
+- name: network12.device
+  lineinfile: dest={{ vmw.netmap }} regexp="^network12.device" line="network12.device = \"vmnet12\""
+  sudo: yes
+  tags: network
+- name: network13.device
+  lineinfile: dest={{ vmw.netmap }} regexp="^network13.device" line="network13.device = \"vmnet13\""
+  sudo: yes
+  tags: network
+- name: network14.device
+  lineinfile: dest={{ vmw.netmap }} regexp="^network14.device" line="network14.device = \"vmnet14\""
+  sudo: yes
+  tags: network
+- name: network15.device
+  lineinfile: dest={{ vmw.netmap }} regexp="^network15.device" line="network15.device = \"vmnet15\""
+  sudo: yes
+  tags: network
+- name: network16.device
+  lineinfile: dest={{ vmw.netmap }} regexp="^network16.device" line="network16.device = \"vmnet16\""
+  sudo: yes
+  tags: network
+- name: network17.device
+  lineinfile: dest={{ vmw.netmap }} regexp="^network17.device" line="network17.device = \"vmnet17\""
+  sudo: yes
+  tags: network
+- name: network18.device
+  lineinfile: dest={{ vmw.netmap }} regexp="^network18.device" line="network18.device = \"vmnet18\""
+  sudo: yes
+  tags: network
+- name: network19.device
+  lineinfile: dest={{ vmw.netmap }} regexp="^network19.device" line="network19.device = \"vmnet19\""
+  sudo: yes
+  tags: network
+- name: network20.device
+  lineinfile: dest={{ vmw.netmap }} regexp="^network20.device" line="network20.device = \"vmnet20\""
+  sudo: yes
+  tags: network
+- name: network21.device
+  lineinfile: dest={{ vmw.netmap }} regexp="^network21.device" line="network21.device = \"vmnet21\""
+  sudo: yes
+  tags: network
+- name: network22.device
+  lineinfile: dest={{ vmw.netmap }} regexp="^network22.device" line="network22.device = \"vmnet22\""
+  sudo: yes
+  tags: network
+- name: network23.device
+  lineinfile: dest={{ vmw.netmap }} regexp="^network23.device" line="network23.device = \"vmnet23\""
+  sudo: yes
+  tags: network
+- name: network24.device
+  lineinfile: dest={{ vmw.netmap }} regexp="^network24.device" line="network24.device = \"vmnet24\""
+  sudo: yes
+  tags: network
+- name: network25.device
+  lineinfile: dest={{ vmw.netmap }} regexp="^network25.device" line="network25.device = \"vmnet25\""
+  sudo: yes
+  tags: network
+
+- name: Restart vmware
+  service: name=vmware state=restarted
+  sudo: yes
+  tags: network
+
+- name: Restart vmware-workstation-server  
+  service: name=vmware-workstation-server state=restarted
+  sudo: yes
+  tags: network

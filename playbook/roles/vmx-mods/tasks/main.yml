@@ -1,0 +1,212 @@
+---
+
+# This one can be refactored down a ton - just look at all this repetition.  I almost scrapped this
+# to go to Ruby about a million times.  Anyway, it works...
+#
+# The 'assemble' function is blech, and the resulting files need to be cleaned/up & optimized.
+# Trash.  Dumps.
+
+- name: vsrx1 eth0.connectionType
+  lineinfile: dest={{ vm.vmx1 }} regexp=ethernet0.connectionType line='ethernet0.connectionType = "hostonly"'
+  tags: vmx-mods
+- name: vsrx1 eth0.vnet
+  lineinfile: dest={{ vm.vmx1 }} regexp=ethernet0.vnet line='ethernet0.vnet = "/dev/vmnet10"'
+  tags: vmx-mods
+- name: vsrx1 eth0.generatedAddress (remove 1)
+  lineinfile: dest={{ vm.vmx1 }} state=absent regexp=ethernet0.generatedAddress
+  tags: vmx-mods
+- name: vsrx1 eth0.generatedAddressOffset (remove 3)
+  lineinfile: dest={{ vm.vmx1 }} state=absent regexp=ethernet0.generatedAddressOffset
+- name: vsrx1 eth0.address
+  tags: vmx-mods
+  lineinfile: dest={{ vm.vmx1 }} regexp=ethernet0.address line='ethernet0.address = "{{ vmw.oui }}{{ router1.mac }}"'
+  tags: vmx-mods
+- name: vsrx1 eth1.connectionType
+  lineinfile: dest={{ vm.vmx1 }} regexp=ethernet1.connectionType line='ethernet1.connectionType = "custom"'
+  tags: vmx-mods-R-R
+- name: vsrx1 eth1.vnet
+  lineinfile: dest={{ vm.vmx1 }} regexp=ethernet1.vnet line='ethernet1.vnet = "/dev/vmnet11"'
+  tags: vmx-mods
+- name: create assembly dir
+  file: path={{ vm.basepath }}/{{router1.hostname}}/vmx state=directory
+  tags: vmx-mods
+- name: copy vsrx1 .vmx 2-5
+  copy: src=vsrx1int dest={{ vm.basepath }}/{{router1.hostname}}/vmx/vsrx1int
+  tags: vmx-mods
+- name: backup vmx for assembly
+  command: /bin/cp vsrx1.vmx ./vmx chdir={{ vm.basepath }}/{{router1.hostname}} creates={{ vm.basepath }}/{{router1.hostname}}/vmx/vsrx1.vmx
+  tags: vmx-mods
+- name: assemble vsrx1 .vmx
+  assemble: src={{ vm.basepath }}/{{router1.hostname}}/vmx dest={{ vm.vmx1 }} backup=yes
+  tags: vmx-mods
+
+- name: vsrx2 eth0.connectionType
+  lineinfile: dest={{ vm.vmx2 }} regexp=ethernet0.connectionType line='ethernet0.connectionType = "hostonly"'
+  tags: vmx-mods
+- name: vsrx2 eth1.vnet
+  lineinfile: dest={{ vm.vmx2 }} regexp=ethernet0.vnet line='ethernet0.vnet = "/dev/vmnet10"'
+  tags: vmx-mods
+- name: vsrx2 eth0.generatedAddress (remove 1)
+  lineinfile: dest={{ vm.vmx2 }} state=absent regexp=ethernet0.generatedAddress
+  tags: vmx-mods
+- name: vsrx2 eth0.generatedAddressOffset (remove 3)
+  lineinfile: dest={{ vm.vmx2 }} state=absent regexp=ethernet0.generatedAddressOffset
+- name: vsrx2 eth0.address
+  tags: vmx-mods
+  lineinfile: dest={{ vm.vmx2 }} regexp=ethernet0.address line='ethernet0.address = "{{ vmw.oui }}{{ router2.mac }}"'
+  tags: vmx-mods
+- name: vsrx2 eth1.connectionType
+  lineinfile: dest={{ vm.vmx2 }} regexp=ethernet1.connectionType line='ethernet1.connectionType = "custom"'
+  tags: vmx-mods
+- name: vsrx2 eth1.vnet
+  lineinfile: dest={{ vm.vmx2 }} regexp=ethernet1.vnet line='ethernet1.vnet = "/dev/vmnet11"'
+  tags: vmx-mods
+- name: create assembly dir
+  file: path={{ vm.basepath }}/{{router2.hostname}}/vmx state=directory
+  tags: vmx-mods
+- name: copy vsrx2 .vmx 2-5
+  copy: src=vsrx2int dest={{ vm.basepath }}/{{router2.hostname}}/vmx/vsrx2int
+  tags: vmx-mods
+- name: backup vmx for assembly
+  command: /bin/cp vsrx2.vmx ./vmx chdir={{ vm.basepath }}/{{router2.hostname}} creates={{ vm.basepath }}/{{router2.hostname}}/vmx/vsrx2.vmx
+  tags: vmx-mods
+- name: assemble vsrx2 .vmx
+  assemble: src={{ vm.basepath }}/{{router2.hostname}}/vmx dest={{ vm.vmx2 }} backup=yes
+  tags: vmx-mods
+
+
+- name: vsrx3 eth0.connectionType
+  lineinfile: dest={{ vm.vmx3 }} regexp=ethernet0.connectionType line='ethernet0.connectionType = "hostonly"'
+  tags: vmx-mods
+- name: vsrx3 eth0.vnet
+  lineinfile: dest={{ vm.vmx3 }} regexp=ethernet0.vnet line='ethernet0.vnet = "/dev/vmnet10"'
+  tags: vmx-mods
+- name: vsrx3 eth0.generatedAddress (remove 1)
+  lineinfile: dest={{ vm.vmx3 }} state=absent regexp=ethernet0.generatedAddress
+  tags: vmx-mods
+- name: vsrx3 eth0.generatedAddressOffset (remove 3)
+  lineinfile: dest={{ vm.vmx3 }} state=absent regexp=ethernet0.generatedAddressOffset
+- name: vsrx3 eth0.address
+  tags: vmx-mods
+  lineinfile: dest={{ vm.vmx3 }} regexp=ethernet0.address line='ethernet0.address = "{{ vmw.oui }}{{ router3.mac }}"'
+  tags: vmx-mods
+- name: vsrx3 eth1.connectionType
+  lineinfile: dest={{ vm.vmx3 }} regexp=ethernet1.connectionType line='ethernet1.connectionType = "custom"'
+  tags: vmx-mods
+- name: vsrx3 eth1.vnet
+  lineinfile: dest={{ vm.vmx3 }} regexp=ethernet1.vnet line='ethernet1.vnet = "/dev/vmnet12"'
+  tags: vmx-mods
+- name: create assembly dir
+  file: path={{ vm.basepath }}/{{router3.hostname}}/vmx state=directory
+  tags: vmx-mods
+- name: copy vsrx3 .vmx 2-5
+  copy: src=vsrx3int dest={{ vm.basepath }}/{{router3.hostname}}/vmx/vsrx3int
+  tags: vmx-mods
+- name: backup vmx for assembly
+  command: /bin/cp vsrx3.vmx ./vmx chdir={{ vm.basepath }}/{{router3.hostname}} creates={{ vm.basepath }}/{{router3.hostname}}/vmx/vsrx3.vmx
+  tags: vmx-mods
+- name: assemble vsrx3 .vmx
+  assemble: src={{ vm.basepath }}/{{router3.hostname}}/vmx dest={{ vm.vmx3 }} backup=yes
+  tags: vmx-mods
+
+- name: vsrx4 eth0.connectionType
+  lineinfile: dest={{ vm.vmx4 }} regexp=ethernet0.connectionType line='ethernet0.connectionType = "hostonly"'
+  tags: vmx-mods
+- name: vsrx4 eth0.vnet
+  lineinfile: dest={{ vm.vmx4 }} regexp=ethernet0.vnet line='ethernet0.vnet = "/dev/vmnet10"'
+  tags: vmx-mods
+- name: vsrx4 eth0.generatedAddress (remove 1)
+  lineinfile: dest={{ vm.vmx4 }} state=absent regexp=ethernet0.generatedAddress
+  tags: vmx-mods
+- name: vsrx4 eth0.generatedAddressOffset (remove 3)
+  lineinfile: dest={{ vm.vmx4 }} state=absent regexp=ethernet0.generatedAddressOffset
+- name: vsrx4 eth0.address
+  tags: vmx-mods
+  lineinfile: dest={{ vm.vmx4 }} regexp=ethernet0.address line='ethernet0.address = "{{ vmw.oui }}{{ router4.mac }}"'
+  tags: vmx-mods
+- name: vsrx4 eth1.connectionType
+  lineinfile: dest={{ vm.vmx4 }} regexp=ethernet1.connectionType line='ethernet1.connectionType = "custom"'
+  tags: vmx-mods
+- name: vsrx4 eth1.vnet
+  lineinfile: dest={{ vm.vmx4 }} regexp=ethernet1.vnet line='ethernet1.vnet = "/dev/vmnet13"'
+  tags: vmx-mods
+- name: create assembly dir
+  file: path={{ vm.basepath }}/{{router4.hostname}}/vmx state=directory
+  tags: vmx-mods
+- name: copy vsrx4 .vmx 2-5
+  copy: src=vsrx4int dest={{ vm.basepath }}/{{router4.hostname}}/vmx/vsrx4int
+  tags: vmx-mods
+- name: backup vmx for assembly
+  command: /bin/cp vsrx4.vmx ./vmx chdir={{ vm.basepath }}/{{router4.hostname}} creates={{ vm.basepath }}/{{router4.hostname}}/vmx/vsrx4.vmx
+  tags: vmx-mods
+- name: assemble vsrx4 .vmx
+  assemble: src={{ vm.basepath }}/{{router4.hostname}}/vmx dest={{ vm.vmx4 }} backup=yes
+  tags: vmx-mods
+
+- name: vsrx5 eth0.connectionType
+  lineinfile: dest={{ vm.vmx5 }} regexp=ethernet0.connectionType line='ethernet0.connectionType = "hostonly"'
+  tags: vmx-mods
+- name: vsrx5 eth0.vnet
+  lineinfile: dest={{ vm.vmx5 }} regexp=ethernet0.vnet line='ethernet0.vnet = "/dev/vmnet10"'
+  tags: vmx-mods
+- name: vsrx5 eth0.generatedAddress (remove 1)
+  lineinfile: dest={{ vm.vmx5 }} state=absent regexp=ethernet0.generatedAddress
+  tags: vmx-mods
+- name: vsrx5 eth0.generatedAddressOffset (remove 3)
+  lineinfile: dest={{ vm.vmx5 }} state=absent regexp=ethernet0.generatedAddressOffset
+- name: vsrx5 eth0.address
+  tags: vmx-mods
+  lineinfile: dest={{ vm.vmx5 }} regexp=ethernet0.address line='ethernet0.address = "{{ vmw.oui }}{{ router5.mac }}"'
+  tags: vmx-mods
+- name: vsrx5 eth1.connectionType
+  lineinfile: dest={{ vm.vmx5 }} regexp=ethernet1.connectionType line='ethernet1.connectionType = "custom"'
+  tags: vmx-mods
+- name: vsrx5 eth1.vnet
+  lineinfile: dest={{ vm.vmx5 }} regexp=ethernet1.vnet line='ethernet1.vnet = "/dev/vmnet14"'
+  tags: vmx-mods
+- name: create assembly dir
+  file: path={{ vm.basepath }}/{{router5.hostname}}/vmx state=directory
+  tags: vmx-mods
+- name: copy vsrx5 .vmx 2-5
+  copy: src=vsrx5int dest={{ vm.basepath }}/{{router5.hostname}}/vmx/vsrx5int
+  tags: vmx-mods
+- name: backup vmx for assembly
+  command: /bin/cp vsrx5.vmx ./vmx chdir={{ vm.basepath }}/{{router5.hostname}} creates={{ vm.basepath }}/{{router5.hostname}}/vmx/vsrx5.vmx
+  tags: vmx-mods
+- name: assemble vsrx5 .vmx
+  assemble: src={{ vm.basepath }}/{{router5.hostname}}/vmx dest={{ vm.vmx5 }} backup=yes
+  tags: vmx-mods
+
+- name: vsrx6 eth0.connectionType
+  lineinfile: dest={{ vm.vmx6 }} regexp=ethernet0.connectionType line='ethernet0.connectionType = "hostonly"'
+  tags: vmx-mods
+- name: vsrx6 eth0.vnet
+  lineinfile: dest={{ vm.vmx6 }} regexp=ethernet0.vnet line='ethernet0.vnet = "/dev/vmnet10"'
+  tags: vmx-mods
+- name: vsrx6 eth0.generatedAddress (remove 1)
+  lineinfile: dest={{ vm.vmx6 }} state=absent regexp=ethernet0.generatedAddress
+  tags: vmx-mods
+- name: vsrx1 eth0.generatedAddressOffset (remove 3)
+  lineinfile: dest={{ vm.vmx6 }} state=absent regexp=ethernet0.generatedAddressOffset
+- name: vsrx5 eth0.address
+  tags: vmx-mods
+  lineinfile: dest={{ vm.vmx6 }} regexp=ethernet0.address line='ethernet0.address = "{{ vmw.oui }}{{ router6.mac }}"'
+  tags: vmx-mods
+- name: vsrx6 eth1.connectionType
+  lineinfile: dest={{ vm.vmx6 }} regexp=ethernet1.connectionType line='ethernet1.connectionType = "custom"'
+  tags: vmx-mods
+- name: vsrx6 eth1.vnet
+  lineinfile: dest={{ vm.vmx6 }} regexp=ethernet1.vnet line='ethernet1.vnet = "/dev/vmnet15"'
+  tags: vmx-mods
+- name: create assembly dir
+  file: path={{ vm.basepath }}/{{router6.hostname}}/vmx state=directory
+  tags: vmx-mods
+- name: copy vsrx6 .vmx 2-5
+  copy: src=vsrx6int dest={{ vm.basepath }}/{{router6.hostname}}/vmx/vsrx6int
+  tags: vmx-mods
+- name: backup vmx for assembly
+  command: /bin/cp vsrx6.vmx ./vmx chdir={{ vm.basepath }}/{{router6.hostname}} creates={{ vm.basepath }}/{{router6.hostname}}/vmx/vsrx6.vmx
+  tags: vmx-mods
+- name: assemble vsrx6 .vmx
+  assemble: src={{ vm.basepath }}/{{router6.hostname}}/vmx dest={{ vm.vmx6 }} backup=yes
+  tags: vmx-mods

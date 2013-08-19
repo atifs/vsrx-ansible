@@ -1,0 +1,66 @@
+---
+
+# YES, this can still be cleaned up - I might switch to templating, if it can remain idempotent
+# (and safe to existing config)
+# issue: if 'virtual ethernet' fails during restart, run Virtual Network Editor once
+# note: this shouldn't happen now
+
+- name: VNET_10 settings
+  lineinfile: dest={{ vmw.networking }} regexp="answer {{ item.regex }}" line="answer {{ item.line }}"
+  with_items:
+  - { regex: 'VNET_10_DHCP', line: 'VNET_10_DHCP no'}
+  - { regex: 'VNET_10_HOSTONLY_NETMASK', line: 'VNET_10_HOSTONLY_NETMASK 255.255.255.0' }
+  - { regex: 'VNET_10_HOSTONLY_SUBNET', line: 'VNET_10_HOSTONLY_SUBNET 192.168.69.0' }
+  - { regex: 'VNET_10_VIRTUAL_ADAPTER', line: 'VNET_10_VIRTUAL_ADAPTER yes' }
+  sudo: yes
+  tags: network
+
+- name: VNET_X_HOSTONLY_NETMASK
+  lineinfile: dest={{ vmw.networking }} regexp="answer VNET_{{ item }}_HOSTONLY_NETMASK" line="answer VNET_{{ item }}_HOSTONLY_NETMASK 255.255.255.0"
+  with_items:
+    - [ '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '24', '25' ]
+  sudo: yes
+  tags: network
+
+- name: VNET_X_HOSTONLY_SUBNET
+  lineinfile: dest={{ vmw.networking }} regexp="answer VNET_{{ item.num }}_HOSTONLY_SUBNET" line="answer VNET_{{ item.num }}_HOSTONLY_SUBNET 192.168.{{ item.subnet }}.0"
+  with_items:
+    - { num: '11', subnet: '101' }
+    - { num: '12', subnet: '102' }
+    - { num: '13', subnet: '103' }
+    - { num: '14', subnet: '104' }
+    - { num: '15', subnet: '105' }
+    - { num: '16', subnet: '106' }
+    - { num: '17', subnet: '107' }
+    - { num: '18', subnet: '108' }
+    - { num: '19', subnet: '109' }
+    - { num: '20', subnet: '110' }
+    - { num: '21', subnet: '111' }
+    - { num: '22', subnet: '112' }
+    - { num: '23', subnet: '113' }
+    - { num: '24', subnet: '114' }
+    - { num: '25', subnet: '115' }
+  sudo: yes
+  tags: network
+
+- name: vmnet10 network device
+  lineinfile: dest={{ vmw.netmap }} regexp="network10.device" line="network10.device = \"vmnet10\""
+  sudo: yes
+  tags: network
+
+- name: network.devices
+  lineinfile: dest={{ vmw.netmap }} regexp="network{{ item }}.device" line="network{{ item }}.device = \"vmnet{{ item }}\""
+  with_items:  
+    - [ '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '24', '25' ]
+  sudo: yes
+  tags: network
+
+- name: Restart vmware
+  service: name=vmware state=restarted
+  sudo: yes
+  tags: network
+
+- name: Restart vmware-workstation-server  
+  service: name=vmware-workstation-server state=restarted
+  sudo: yes
+  tags: network

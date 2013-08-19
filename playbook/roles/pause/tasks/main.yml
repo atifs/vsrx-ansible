@@ -1,0 +1,11 @@
+---
+
+- name: Safely "pause" VSRXes
+  command: ${vmw.vmrun} pause {{ vm.basepath }}/{{ item.hostname }}/{{ item.hostname }}.vmx
+  with_items:
+  - hostname: ${router1.hostname}
+  - hostname: ${router2.hostname}
+  - hostname: ${router3.hostname}
+  - hostname: ${router4.hostname}
+  - hostname: ${router5.hostname}
+  - hostname: ${router6.hostname}

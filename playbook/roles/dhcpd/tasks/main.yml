@@ -1,0 +1,39 @@
+---
+- name: Install packages for Debian-based distros
+  apt: pkg={{ item }} state=present
+  with_items:
+    - isc-dhcp-server
+  tags: dhcpd
+  sudo: yes
+  when: ansible_os_family == "Debian"
+
+- name: Install packages for RPM-based distros
+  yum: pkg={{ item }} state=present
+  with_items:
+    - dhcp
+  tags: dhpcd
+  sudo: yes
+  when: ansible_os_family == "RedHat"
+
+# should chkconfig on RPM-based and it probably defaults to a different destination - will test later
+
+- name: Stop dhcpd if running from a previous run
+  service: name=isc-dhcp-server state=stopped
+  tags: dhcpd
+  sudo: yes
+
+- name: Copy dhcp-server default
+  template: src=dhcp-server.j2 dest=/etc/default/dhcp-server backup=yes
+  tags: dhcpd
+  sudo: yes
+
+- name: Check for existence of INTERFACES line
+  lineinfile: dest=/etc/default/dhcp-server regexp="INTERFACES=" line="INTERFACES=\"vmnet10\""
+  tags: dhcpd
+  sudo: yes
+
+- name: Configure dhcpd
+  template: src=dhcpd.conf.j2 dest=/etc/dhcp/dhcpd.conf backup=yes
+  notify: start dhcpd
+  tags: dhcpd
+  sudo: yes

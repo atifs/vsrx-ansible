@@ -1,0 +1,15 @@
+---
+- name: Install and start six VSRX devices from .OVA
+  hosts: localhost
+  user: $local_user
+
+  roles:
+    - common
+    - network 
+    - tftpd
+    - ovftool-install
+    - vmx-mods
+    - dhcpd
+    - autoinstallation
+    # - superdebug (serial port sockets, git repo per VM. and tcpdump)
+    - start

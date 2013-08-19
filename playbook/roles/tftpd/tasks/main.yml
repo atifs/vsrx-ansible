@@ -1,0 +1,35 @@
+---
+- name: Install packages for Debian-based distros
+  apt: pkg={{ item }} state=present
+  with_items:
+    - tftp
+    - tftpd
+    - xinetd
+  tags: tftpd  
+  sudo: yes
+  when: ansible_os_family == "Debian"
+
+- name: Install packages for RPM-based distros
+  yum: pkg={{ item }} state=present
+  with_items:
+    - tftp
+    - tftp-server
+    - xinetd
+  tags: tftpd
+  sudo: yes
+  when: ansible_os_family == "RedHat"
+
+- name: Create tftp directory
+  file: dest={{ tftp.dir }} mode=777 owner=nobody state=directory recurse=yes
+  tags: tftpd
+  sudo: yes
+
+- name: Configure
+  copy: src=tftp dest=/etc/xinetd.d/tftp
+  tags: tftpd  
+  sudo: yes
+
+- name: Restart xinetd
+  service: name=xinetd state=restarted
+  tags: tftpd  
+  sudo: yes

@@ -1,0 +1,124 @@
+---
+
+###### Expect future versions to get "heavy into Ansible-friendly YAML*"
+###### (*) currently, I seem to break it a lot
+
+######################## MOST CHANGES IN HERE ########################
+local_user: death
+local_group: death
+domain: example.com
+tftp:
+   dir: /tftpboot
+ova:
+   path: /tmp/junos-vsrx-12.1X44-D10.4-domestic.ova
+   sha1sum: 897a57c485a162364808facd145087da20e6bd01
+######################## MOST CHANGES IN HERE ########################
+
+
+###### VM vars - full VMX paths were bug fixes, can probably go
+###### basepath (and all other paths) must be absolute!!!
+
+vm:
+   basepath: /var/vm
+   vmx1: /var/vm/vsrx1/vsrx1.vmx
+   vmx2: /var/vm/vsrx2/vsrx2.vmx
+   vmx3: /var/vm/vsrx3/vsrx3.vmx
+   vmx4: /var/vm/vsrx4/vsrx4.vmx
+   vmx5: /var/vm/vsrx5/vsrx5.vmx
+   vmx6: /var/vm/vsrx6/vsrx6.vmx
+
+###### router config
+######
+###### valid VMware MAC range is 00:50:56:00:00:00-00:50:56:3F:FF:FF
+###### this is your bootstrap/dynamic/mgmt interface
+######
+###### net.block must match what you set vmnet1 to manually
+###### e.g. 192.168.69.0/24 = 192.168.69.
+######
+###### Junos initial config set to defaults, but can be customized per router
+###### default is packet-based mode
+###### short version: packet-based mode = routing, flow-based mode = firewall
+######
+###### Want to make changes?:
+###### 1. Make new configs (e.g. hostname.conf) in roles/autoinstallation/files
+######    (it must be hostname.conf; the router looks for its hostname)
+###### 2. Add config names here to the appropriate routers
+###### 3. Add extra lines to roles/autoinstallation/tasks/main.yml
+###### 4. Ensure host names resolve - fire up tcpdump as root on vmnet1 for issues
+######
+###### OR, you could just make modifications with Junos automation as intended...
+
+net:
+   block: 192.168.69.
+
+router1:
+   hostname: vsrx1
+   mac: '56:56:01'
+   ip: 201
+   conf: packetbased.conf
+   serial: /tmp/vsrx1.socket
+router2:
+   hostname: vsrx2
+   mac: '56:56:02'
+   ip: 202
+   conf: packetbased.conf
+   serial: /tmp/vsrx2.socket
+router3:
+   hostname: vsrx3
+   mac: '56:56:03'
+   ip: 203
+   conf: packetbased.conf
+   serial: /tmp/vsrx3.socket
+router4:
+   hostname: vsrx4
+   mac: '56:56:04'
+   ip: 204
+   conf: packetbased.conf
+   serial: /tmp/vsrx4.socket
+router5:
+   hostname: vsrx5
+   mac: '56:56:05'
+   ip: 205
+   conf: packetbased.conf
+   serial: /tmp/vsrx5.socket
+router6:
+   hostname: vsrx6
+   mac: '56:56:06'
+   ip: 206
+   conf: packetbased.conf
+   serial: /tmp/vsrx6.socket
+
+
+###### VMware vars
+###### vmw.oui **MUST** be 00:50:56:
+vmw:
+   networking: /etc/vmware/networking
+   netmap: /etc/vmware/netmap.conf
+   dhcpd: /etc/vmware/vmnet1/dhcpd
+   vmrun: /usr/bin/vmrun
+   ovftool: /usr/bin/ovftool
+   flags: '--acceptAllEulas'
+   oui: '00:50:56:'
+
+vmnet:
+  mgmt: vmnet10
+
+###### dnsmasq: unused, may come back after more testing
+
+dnsmasq:
+  user: dnsmasq
+  port: 0
+  interface: vmnet1
+  domain: example.com
+  # Set the NTP time server address to this host
+  dhcp-option: 42,0.0.0.0
+  dhcp-boot: pxelinux.0
+  dhcp-range: 192.168.69.201,192.168.69.250,255.255.255.0,72h
+
+dnsmasq_dhcp_host:
+  - 00:50:56:56:56:01,vsrx1,192.168.69.201
+  - 00:50:56:56:56:02,vsrx2,192.168.69.202
+  - 00:50:56:56:56:03,vsrx3,192.168.69.203
+  - 00:50:56:56:56:04,vsrx4,192.168.69.204
+  - 00:50:56:56:56:05,vsrx5,192.168.69.205
+  - 00:50:56:56:56:06,vsrx6,192.168.69.206
