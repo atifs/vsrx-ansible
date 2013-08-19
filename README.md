@@ -39,7 +39,7 @@ On Windows??? [rolr.io](https://rolr.io) will have a Ruby or Golang virtual netw
 - **`ovftool-install`** - install VSRX from .OVAs
 - **`vmx-mods`** - modifications to each .VMX file, "under the rug" section needs major work & testing
 - **`dhcpd`** - provides DHCP for autoinstallation
-- **`autoinstallation``**
+- **`autoinstallation`**
   - copies router configs to tftp dir
   - will be used for config templating
   - deprecated VMware dhcpd section, could be handy if fixed
@@ -60,6 +60,8 @@ On Windows??? [rolr.io](https://rolr.io) will have a Ruby or Golang virtual netw
     
  > Yes, it's that easy, assuming you didn't go and modify the playbook
 
+4. For now, you'll just need to wait for the routers to come up.  I'll add better built-in notifications, e.g. libnotify and Growl.
+
 5. It is recommended that you gracefully shutdown these VMs from Junos first, as there is no VMware Tools (client tools) functionality for VSRX... yet.  Once they're gracefully shutdown, use `stop.yml` for stopping them (or use Workstation client).  You can also use `pause.yml` to suspend them, and come back later.
  
 
@@ -68,6 +70,10 @@ On Windows??? [rolr.io](https://rolr.io) will have a Ruby or Golang virtual netw
 - Accessible via SSH, HTTPS, and Netconf over SSH
 - **user**: `netdevops` **pass**: `netdevops1`
 - You'll be able to add your SSH key to the playbooks shortly 
+
+### Network diagram (virtual networks)
+
+- IOU!
 
 #### Other NetDevOps links
 
